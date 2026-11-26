@@ -128,6 +128,13 @@ const COST = {
   'Energy': ['Total Energy Cost Expenses'],
   'FF&E & non-operating': ['Total Non Operating Expenses'],
 };
+// Departments (USALI style): each operated department's own revenue and direct costs.
+// Everything else in Total Expenses is undistributed (A&G, sales, HR, security, R&M, energy, non-operating...).
+const DEPT = {
+  rooms: {rev: REV.Rooms, cost: ['Total Rooms Payroll Expeses', 'Total Rooms Other Expeses', 'Total H.Keeping Payroll Expenses', 'Total H.Keeping Other Expenses']},
+  fnb: {rev: [...REV.Food, ...REV.Beverage], cost: ['Total FOOD: CREDIT TO COST OF SALES', 'Total BEV: CREDIT COST OF SALES', 'Total Cost Of Tobaco', 'Total F & B Payroll Expeses', 'Total F & B Other Expeses']},
+  other: {rev: [...REV['Pool & recreation'], ...REV['Excursions & other']], cost: ['Total Laundry Cost Of Sales', 'Total Recreation Other Expenses']},
+};
 const R = (x) => Math.round(x);
 const n0 = (v) => R(v).toLocaleString('en-US').replace('-', '−');
 const p1 = (v) => (Math.round(v * 10) / 10).toFixed(1);
@@ -223,6 +230,13 @@ function build(exports) {
       food_cost: R(s(COST['Food cost of sales'])), beverage_cost: R(s(COST['Beverage cost of sales'])),
       payroll: R(pay), maintenance: R(s(COST['Maintenance (R&M)'])), energy: R(s(COST.Energy)),
     };
+    let deptCost = 0;
+    for (const [k, d] of Object.entries(DEPT)) {
+      const rv = s(d.rev), c = s(d.cost);
+      deptCost += c;
+      row[k + '_dept_revenue'] = R(rv); row[k + '_dept_cost'] = R(c); row[k + '_profit'] = R(rv - c);
+    }
+    row.undistributed = R(g('Total Expenses') - deptCost);
     periodRows.push(row);
     if (p.kind === 'ref') continue;
     let rs = 0, cs = 0;
@@ -236,7 +250,8 @@ function build(exports) {
 
   const summary = months.slice(-12).map((m) => {
     const pr = periodRows.find((r) => r.period === m);
-    return {month: lab(m).en, revenue: pr.revenue, expenses: pr.expenses, gop: pr.gop};
+    return {month: lab(m).en, period: m, revenue: pr.revenue, expenses: pr.expenses, gop: pr.gop,
+      rooms_profit: pr.rooms_profit, fnb_profit: pr.fnb_profit, other_profit: pr.other_profit, undistributed: pr.undistributed};
   });
 
   let movers = [];
