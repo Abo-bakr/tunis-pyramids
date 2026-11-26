@@ -1,0 +1,766 @@
+<meta name="dash-one-writer">
+<meta name="dash-form" content="dashboard">
+<style>
+#dash-root{--dash-gutter:0}
+.tp{--bg:#070b08;--side:#0b110d;--panel:#0f1712;--panel2:#141f18;--line:#1f2d24;--fg:#e9f3ec;--muted:#8a9b90;--dim:#5d6e63;
+  --lime:#9be35a;--green:#4cc23a;--deep:#1f6b2a;--bad:#ff6b6b;--warn:#f2c14e;
+  color-scheme:dark;background:radial-gradient(1200px 500px at 30% -10%,#12321a 0%,transparent 60%),var(--bg);color:var(--fg);
+  font-family:var(--font-anthropic-sans);container-type:inline-size;border-radius:14px;overflow:hidden;border:1px solid #1d3a24}
+.tp.ar-on{direction:rtl;font-family:"Segoe UI",Tahoma,"Noto Sans Arabic","Geeza Pro",var(--font-anthropic-sans)}
+.tp:not(.ar-on) .ar,.tp.ar-on .en{display:none!important}
+.tp *{box-sizing:border-box}
+.tp svg{direction:ltr}
+.tp-app{display:grid;grid-template-columns:210px minmax(0,1fr) 290px;min-height:100%}
+.tp-side{background:var(--side);border-inline-end:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:18px}
+.tp-brand{display:flex;gap:10px;align-items:center}
+.tp-logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(145deg,#c2f58a 0%,var(--lime) 40%,#2f8f3a 100%);display:grid;place-items:center;flex:none;box-shadow:0 0 0 1px #3c7a44,0 6px 18px rgba(155,227,90,.28),inset 0 1px 0 rgba(255,255,255,.35)}
+.tp-logo svg{display:block}
+.tp-filter{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.tp-filter .lab{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.tp.ar-on .tp-filter .lab{letter-spacing:0}
+.tp-seg{display:inline-flex;background:#0a120d;border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+.tp-seg button{all:unset;cursor:pointer;font-size:12.5px;padding:6px 14px;border-radius:8px;color:var(--muted)}
+.tp-seg button:hover{color:var(--fg)}
+.tp-seg button.on{background:var(--lime);color:#0a1f0e;font-weight:600}
+.tp-seg button.off{opacity:.55}
+.tp-select{appearance:none;background:#0a120d url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239be35a'/%3E%3C/svg%3E") no-repeat right 10px center;border:1px solid #2e5a35;color:var(--fg);border-radius:10px;padding:7px 30px 7px 12px;font:inherit;font-size:12.5px;min-width:200px;max-width:100%}
+.tp.ar-on .tp-select{background-position:left 10px center;padding:7px 12px 7px 30px}
+.tp-select:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.tp-cmpnote{font-size:12px;color:var(--dim)}.tp-cmpnote b{color:var(--muted);font-weight:500}
+.tp-note{flex-basis:100%;margin:0;font-size:12px;line-height:1.5;padding:8px 10px;border-radius:9px}
+.tp-note.day{background:#13221a;color:var(--muted);border:1px dashed #2e5a35}
+.tp-note.ytd{background:#2a2310;color:#f3d98a;border:1px solid #4a3d16}
+.tp tr.sel td{background:#13261a}
+.tp tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--lime)}
+.tp.ar-on tr.sel td:first-child{box-shadow:inset -3px 0 0 var(--lime)}
+.tp-scope{font-size:11px;color:var(--dim);margin:2px 0 0}
+.tp-export{display:inline-flex;gap:6px}
+.tp-export button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:5px 12px;border-radius:999px;border:1px solid #2e5a35;color:var(--lime);background:#0c160f}
+.tp-export button:hover{background:#13261a}
+.tp-export svg{width:13px;height:13px}
+#export-msgs{display:contents}
+.tp-note.exp{background:#13221a;color:var(--muted);border:1px solid #2e5a35}
+.tp-note.exp.bad{background:#2a1212;color:#ffb3b3;border-color:#5a2020}
+@media print{
+ .tp,.tp *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .tp{border:0;border-radius:0}
+ .tp-nav,.tp-lang,.tp-export,.tp-seg,.tp-cta button,#export-msgs,.tp-tip,.tp-note.day{display:none!important}
+}
+.tp-brand b{display:block;font-size:14px}.tp-brand small{color:var(--muted);font-size:11px}
+.tp-nav{display:flex;flex-direction:column;gap:4px}
+.tp-nav .h{font-size:10px;letter-spacing:.12em;color:var(--dim);margin:12px 8px 4px;text-transform:uppercase}
+.tp-nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;color:var(--muted);font-size:13px}
+.tp-nav button:hover{background:var(--panel2);color:var(--fg)}
+.tp button:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.tp-nav button.on{background:var(--lime);color:#0a1f0e;font-weight:600}
+.tp-nav svg{width:16px;height:16px;flex:none}
+.tp-side .foot{margin-top:auto;color:var(--dim);font-size:11px;line-height:1.5}
+.tp-main{padding:18px 20px 26px;display:grid;gap:16px;align-content:start;min-width:0}
+.tp-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.tp-topr{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tp-crumb{font-size:12px;color:var(--dim)}.tp-crumb b{color:var(--fg);font-weight:500}
+.tp-pill{font-size:11px;color:var(--lime);border:1px solid #2e5a35;background:#0f2414;padding:4px 10px;border-radius:999px}
+.tp-lang{display:inline-flex;border:1px solid #2e5a35;border-radius:999px;padding:2px;background:#0c160f}
+.tp-lang button{all:unset;cursor:pointer;font-size:12px;padding:4px 12px;border-radius:999px;color:var(--muted)}
+.tp-lang button[aria-pressed="true"]{background:var(--lime);color:#0a1f0e;font-weight:600}
+.tp h1{margin:2px 0 0;font-size:22px;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
+.tp.ar-on h1{letter-spacing:0}
+.tp-lead{margin:0;color:var(--muted);font-size:13px;line-height:1.7;max-width:80ch}
+.tp-lead b{color:var(--fg)}
+.tp-card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0;position:relative}
+.tp-card h2{margin:0;font-size:15px;font-weight:600;text-wrap:balance}
+.tp-card .sub{margin:3px 0 10px;color:var(--dim);font-size:11.5px;line-height:1.5}
+.tp-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tp-kpi{display:grid;gap:6px;align-content:start}
+.tp-kpi .k{font-size:12px;color:var(--muted)}
+.tp-kpi .big{font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.01em;line-height:1.1;direction:ltr;unicode-bidi:isolate}
+.tp.ar-on .tp-kpi .big{text-align:right}
+.tp-kpi .d{font-size:11.5px;color:var(--dim);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tp-spark{height:38px;width:100%}
+.tp-gaugerow{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:end}
+.tp-gaugerow>div:first-child{display:grid;gap:6px}
+.tp-gauge{width:92px;height:62px}
+.tp-num{font-variant-numeric:tabular-nums;white-space:nowrap;direction:ltr;unicode-bidi:isolate}
+.up{color:var(--lime)}.dn{color:var(--bad)}.wn{color:var(--warn)}
+.tp-row2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px}
+.tp-stack{display:grid;gap:14px;align-content:start}
+.tp-mini{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tp-mini .tp-card{display:grid;gap:4px;align-content:start}
+.tp-ico{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--lime);color:#0a1f0e;margin-bottom:6px}
+.tp-ico svg{width:16px;height:16px}
+.tp-mini .k{font-size:11.5px;color:var(--muted)}
+.tp-mini .v{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+.tp-mini .s{font-size:11px;color:var(--dim)}
+.tp-donutwrap{display:grid;grid-template-columns:minmax(150px,200px) 1fr;gap:18px;align-items:center}
+.tp-donut{width:100%;aspect-ratio:1;max-width:200px;position:relative}
+.tp-legend{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;align-content:center}
+.tp-legend .it{display:grid;gap:2px;font-size:12px;color:var(--muted)}
+.tp-legend .it span:first-child{display:flex;align-items:center;gap:7px}
+.tp-legend i{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.tp-legend .it b{color:var(--fg);font-weight:500;font-variant-numeric:tabular-nums;padding-inline-start:16px}
+.tp-hero{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.tp-hero .tp-ico{margin:0;border-radius:9px;width:36px;height:36px}
+.tp-hero small{display:block;color:var(--muted);font-size:11.5px}.tp-hero b{font-size:18px;font-variant-numeric:tabular-nums}
+.tp-chart{position:relative;width:100%;min-height:200px}
+.tp-chart svg,.tp-spark svg,.tp-donut svg,.tp-gauge svg{display:block;overflow:visible}
+.tp .axis text,.tp .lbl{fill:var(--dim);font-size:11px;font-family:inherit}
+.tp .axis path,.tp .axis line{stroke:var(--line)}
+.tp .grid line{stroke:#1a261e;stroke-dasharray:2 3}
+.tp-tip{position:absolute;pointer-events:none;background:#0b130e;border:1px solid #2b4a33;box-shadow:0 8px 24px rgba(0,0,0,.5);border-radius:8px;padding:6px 9px;font-size:11.5px;font-variant-numeric:tabular-nums;white-space:nowrap;z-index:5;color:var(--fg)}
+.tp-tip div:first-child{font-weight:600;color:var(--lime)}
+.tp-wrap{overflow-x:auto}
+.tp table{border-collapse:collapse;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums}
+.tp th,.tp td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:end;white-space:nowrap}
+.tp th{color:var(--dim);font-weight:500;font-size:11.5px}
+.tp th:first-child,.tp td:first-child{text-align:start}
+.tp tbody tr:hover{background:#132019}
+.tp-who{display:flex;gap:10px;align-items:center}
+.tp-av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:700;flex:none}
+.tp-av.r{background:#1d4a24;color:var(--lime)}.tp-av.c{background:#3a2a12;color:var(--warn)}
+.tp-who small{display:block;color:var(--dim);font-size:10.5px}
+.tp tfoot td{color:var(--dim);font-size:11px;border-bottom:0}
+.tp-chip{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11.5px;font-weight:600;direction:ltr}
+.tp-chip.up{background:#16361c}.tp-chip.wn{background:#3a2f12}.tp-chip.dn{background:#3d1717}
+.tp-row3{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px}
+.tp-checks ol{margin:6px 0 0;padding-inline-start:1.2em;display:grid;gap:8px;font-size:12.5px;line-height:1.65;color:var(--muted)}
+.tp-checks b,.tp-checks .tp-num{color:var(--fg)}
+.tp-right{background:var(--side);border-inline-start:1px solid var(--line);padding:20px 16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.tp-right h2{margin:0;font-size:15px;font-weight:600}
+.tp-feed{display:grid;gap:14px;list-style:none;margin:12px 0 0;padding:0}
+.tp-feed li{display:grid;grid-template-columns:30px 1fr;gap:10px;font-size:12px;line-height:1.55}
+.tp-feed .dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;border:1.5px solid;font-size:13px;font-weight:700}
+.tp-feed .dot.dn{border-color:var(--bad);background:#2a1212}.tp-feed .dot.wn{border-color:var(--warn);background:#2a2310}.tp-feed .dot.up{border-color:var(--lime);background:#12260f}
+.tp-feed small{display:block;color:var(--dim);font-size:10.5px;margin-top:2px}
+.tp-feed b{font-weight:600}
+.tp-sep{border:0;border-top:1px solid var(--line);margin:4px 0}
+.tp-time{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:12px}
+.tp-time li{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:12px;line-height:1.55;color:var(--fg)}
+.tp-time .n{width:22px;height:22px;border-radius:50%;background:#16361c;color:var(--lime);display:grid;place-items:center;font-size:11px;font-weight:700}
+.tp-time small{display:block;color:var(--dim);font-size:10.5px}
+.tp-cta{border:1px solid #2e6a37;border-radius:14px;padding:16px;background:linear-gradient(160deg,#12301a,#0c160f);display:grid;gap:8px}
+.tp-cta b{font-size:15px}.tp-cta p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+.tp-cta button{all:unset;cursor:pointer;text-align:center;background:var(--lime);color:#0a1f0e;font-weight:600;font-size:12.5px;border-radius:9px;padding:9px 12px}
+.tp details{color:var(--dim);font-size:11.5px;line-height:1.6}
+.tp details summary{cursor:pointer;color:var(--muted)}
+@container (max-width:1180px){.tp-app{grid-template-columns:200px minmax(0,1fr)}.tp-right{grid-column:1 / -1;border-inline-start:0;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));align-items:start}}
+@container (max-width:980px){.tp-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.tp-row2,.tp-row3{grid-template-columns:minmax(0,1fr)}}
+@container (max-width:760px){.tp-app{grid-template-columns:minmax(0,1fr)}.tp-side{border-inline-end:0;border-bottom:1px solid var(--line);padding:14px}.tp-nav{flex-direction:row;overflow-x:auto}.tp-nav .h,.tp-side .foot{display:none}.tp-nav button{white-space:nowrap}.tp-main{padding:14px}}
+@container (max-width:480px){.tp-kpis,.tp-mini{grid-template-columns:minmax(0,1fr)}.tp-donutwrap{grid-template-columns:minmax(0,1fr);justify-items:center}.tp-legend{width:100%}}
+</style>
+
+<div class="tp">
+ <div class="tp-app">
+  <aside class="tp-side" id="sidebar">
+   <div class="tp-brand"><div class="tp-logo" aria-hidden="true"><svg viewBox="0 0 32 32" width="26" height="26"><circle cx="25" cy="8" r="2.8" fill="#0a1f0e" opacity=".45"/><path d="M22 13 30 26H14z" fill="#0a1f0e" opacity=".35"/><path d="M13 5 25 26H1z" fill="#0a1f0e"/><path d="M13 5 25 26H16z" fill="#2c5f33"/><path d="M1 27.5h29" stroke="#0a1f0e" stroke-width="1.6" stroke-linecap="round" opacity=".6"/></svg></div><div><b><span class="en">Tunis Pyramids</span><span class="ar" lang="ar">تونس بيراميدز</span></b><small><span class="en">Finance · P&amp;L review</span><span class="ar" lang="ar">المالية · مراجعة الأرباح والخسائر</span></small></div></div>
+   <nav class="tp-nav" aria-label="Sections">
+    <button type="button" class="on" data-target="overview"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z"/></svg><span class="en">Overview</span><span class="ar" lang="ar">نظرة عامة</span></button>
+    <button type="button" data-target="revenue-sec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v8l6 4"/></svg><span class="en">Revenue</span><span class="ar" lang="ar">الإيرادات</span></button>
+    <button type="button" data-target="costs-sec"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="4" y="12" width="4" height="8"/><rect x="10" y="7" width="4" height="13"/><rect x="16" y="3" width="4" height="17"/></svg><span class="en">Costs</span><span class="ar" lang="ar">التكاليف</span></button>
+    <button type="button" data-target="ratios-sec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 18a8 8 0 0 1 16 0"/><path d="m12 18 4-6"/></svg><span class="en">Ratios</span><span class="ar" lang="ar">المؤشرات</span></button>
+    <button type="button" data-target="movers-sec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="en">Accounts</span><span class="ar" lang="ar">الحسابات</span></button>
+    <span class="h"><span class="en">Review</span><span class="ar" lang="ar">المراجعة</span></span>
+    <button type="button" data-target="alerts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg><span class="en">Alerts</span><span class="ar" lang="ar">التنبيهات</span></button>
+    <button type="button" data-target="data-checks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg><span class="en">Data checks</span><span class="ar" lang="ar">مراجعة البيانات</span></button>
+    <button type="button" data-target="actions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span class="en">Actions</span><span class="ar" lang="ar">الإجراءات</span></button>
+   </nav>
+   <div class="foot">{{FOOT}}</div>
+  </aside>
+
+  <main class="tp-main">
+   <div class="tp-top" id="overview">
+    <div>
+     <div class="tp-crumb"><span class="en">Dashboards / <b>P&amp;L overview</b></span><span class="ar" lang="ar">لوحات المعلومات / <b>نظرة عامة على الأرباح والخسائر</b></span></div>
+     <h1>{{H1}}</h1>
+    </div>
+    <div class="tp-topr">
+     <span class="tp-pill">{{PILL}}</span>
+     <div class="tp-export" role="group" aria-label="Export"><button type="button" id="export-html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>HTML</button><button type="button" id="export-pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>PDF</button></div>
+     <div class="tp-lang" role="group" aria-label="Language / اللغة"><button type="button" data-lang="en" aria-pressed="true">English</button><button type="button" data-lang="ar" aria-pressed="false" lang="ar">عربي</button></div>
+    </div>
+   </div>
+   <div id="export-msgs">
+    <p class="tp-note exp" id="msg-saved" hidden><span class="en">The HTML file was handed to your browser to save. It opens offline in any browser, keeps the period and language shown here, and has a Print / Save as PDF button.</span><span class="ar" lang="ar">تم تسليم ملف HTML للمتصفح لحفظه. يفتح بدون إنترنت في أي متصفح، ويحتفظ بالفترة واللغة المعروضة هنا، ويحتوي على زر طباعة / حفظ كـ PDF.</span></p>
+    <p class="tp-note exp" id="msg-declined" hidden><span class="en">The download was cancelled. Press HTML again whenever you want the file.</span><span class="ar" lang="ar">تم إلغاء التنزيل. اضغط HTML مرة أخرى عندما تريد الملف.</span></p>
+    <p class="tp-note exp bad" id="msg-unavail" hidden><span class="en">Downloads are not available in this view. Open the dashboard on claude.ai in your browser, or use Share, then Export, at the top of the page.</span><span class="ar" lang="ar">التنزيل غير متاح في هذا العرض. افتح لوحة المعلومات على claude.ai من المتصفح، أو استخدم مشاركة ثم تصدير أعلى الصفحة.</span></p>
+    <p class="tp-note exp" id="msg-pdf" hidden><span class="en">To save a PDF: open <b>Share</b> at the top of this dashboard, choose <b>Export</b>, then <b>PDF</b>, and pick “Save as PDF” in the print dialog. It shows the period and language selected now. Or press HTML and use the Print / Save as PDF button in the saved file.</span><span class="ar" lang="ar">لحفظ ملف PDF: افتح <b>مشاركة</b> أعلى لوحة المعلومات، واختر <b>تصدير</b> ثم <b>PDF</b>، ثم اختر «حفظ كـ PDF» في نافذة الطباعة. يعرض الملف الفترة واللغة المختارة الآن. أو اضغط HTML واستخدم زر الطباعة / حفظ كـ PDF في الملف المحفوظ.</span></p>
+   </div>
+
+   <section class="tp-filter" id="period-filter" aria-label="Period filter">
+    <span class="lab"><span class="en">Period</span><span class="ar" lang="ar">الفترة</span></span>
+    <div class="tp-seg" role="group" aria-label="Period type">
+     <button type="button" data-kind="year"><span class="en">Year</span><span class="ar" lang="ar">سنة</span></button>
+     <button type="button" data-kind="quarter"><span class="en">Quarter</span><span class="ar" lang="ar">ربع سنة</span></button>
+     <button type="button" data-kind="month" class="on"><span class="en">Month</span><span class="ar" lang="ar">شهر</span></button>
+     <button type="button" data-kind="day" class="off"><span class="en">Day</span><span class="ar" lang="ar">يوم</span></button>
+    </div>
+    <select class="tp-select" id="period-select" data-draw="period-select" data-source="periods" aria-label="Period"></select>
+    <span class="tp-cmpnote tp-hascmp"><span class="en">Compared with</span><span class="ar" lang="ar">مقارنة بـ</span> <b data-draw="cmp-label">—</b></span>
+    <p class="tp-note day" id="day-note" hidden><span class="en">Daily figures are not in these exports: the system P&amp;L only has monthly and year-to-date columns. Send a daily revenue report (for example the night-audit daily report or a daily P&amp;L export) and the Day filter can be switched on.</span><span class="ar" lang="ar">الأرقام اليومية غير موجودة في هذه الملفات: قائمة الأرباح والخسائر من النظام تحتوي على أعمدة شهرية ومنذ بداية العام فقط. أرسل تقرير إيرادات يومي (مثل تقرير التدقيق الليلي أو قائمة أرباح وخسائر يومية) لتفعيل فلتر اليوم.</span></p>
+    <p class="tp-note ytd" id="ytd-note" hidden>{{YTD_NOTE}}</p>
+   </section>
+
+   <p class="tp-lead en" id="takeaway"><b data-draw="plabel">—</b> closed with a GOP of <b class="tp-num dash-skeleton" data-draw="v" data-source="periods" data-field="gop" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="egp" data-tone="sign">—</b> (<b class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="gop_margin" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="pct" data-tone="sign">—</b> margin).<span class="tp-hascmp"> Revenue moved <b class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="rev_change_pct" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="spct" data-tone="sign">—</b> against <span data-draw="cmp-label">—</span>, while expenses moved <b class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="exp_change_pct" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="spct" data-tone="neg-good">—</b>.</span></p>
+   <p class="tp-lead ar" lang="ar" id="takeaway-ar">أغلقت فترة <b data-draw="plabel">—</b> بإجمالي ربح تشغيلي قدره <b class="tp-num dash-skeleton" data-draw="v" data-source="periods" data-field="gop" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="egp" data-tone="sign">—</b> (هامش <b class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="gop_margin" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="pct" data-tone="sign">—</b>).<span class="tp-hascmp"> تغيرت الإيرادات بنسبة <b class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="rev_change_pct" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="spct" data-tone="sign">—</b> مقارنة بـ <span data-draw="cmp-label">—</span>، بينما تغيرت المصروفات بنسبة <b class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="exp_change_pct" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="spct" data-tone="neg-good">—</b>.</span></p>
+
+   <section class="tp-kpis" id="kpis" aria-label="Headline figures for the selected period">
+    <div class="tp-card tp-kpi" id="kpi-revenue"><span class="k"><span class="en">Net revenue</span><span class="ar" lang="ar">صافي الإيرادات</span></span><span class="big dash-skeleton" data-draw="v" data-source="periods" data-field="revenue" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="egp">—</span><span class="d tp-hascmp"><b class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="rev_change_pct" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="spct" data-tone="sign">—</b><span class="en">vs</span><span class="ar" lang="ar">مقابل</span> <span data-draw="cmp-label">—</span></span><div class="tp-spark" data-draw="spark" data-source="summary" data-field="revenue"></div></div>
+    <div class="tp-card tp-kpi" id="kpi-expenses"><span class="k"><span class="en">Total expenses</span><span class="ar" lang="ar">إجمالي المصروفات</span></span><span class="big dash-skeleton" data-draw="v" data-source="periods" data-field="expenses" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="egp">—</span><span class="d tp-hascmp"><b class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="exp_change_pct" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="spct" data-tone="neg-good">—</b><span class="en">vs</span><span class="ar" lang="ar">مقابل</span> <span data-draw="cmp-label">—</span></span><div class="tp-spark" data-draw="spark" data-source="summary" data-field="expenses"></div></div>
+    <div class="tp-card tp-kpi" id="kpi-food"><span class="k"><span class="en">Food cost %</span><span class="ar" lang="ar">نسبة تكلفة الأغذية</span></span><div class="tp-gaugerow"><div><span class="big dash-skeleton" data-draw="v" data-source="ratios" data-field="food_cost_pct" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="pct" data-bench="food_cost_pct">—</span><span class="d"><span class="en">Norm ≤ 35%</span><span class="ar" lang="ar">المعيار ≤ 35%</span><span class="tp-hascmp"> · <span data-draw="cmp-label">—</span> <span class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="food_cost_pct" data-where="period={{PREV}}" data-dyn="cmp" data-fmt="pct">—</span></span></span></div><div class="tp-gauge" data-draw="gauge" data-source="ratios" data-field="food_cost_pct"></div></div></div>
+    <div class="tp-card tp-kpi" id="kpi-gop"><span class="k"><span class="en">Gross operating profit</span><span class="ar" lang="ar">إجمالي الربح التشغيلي</span></span><span class="big dash-skeleton" data-draw="v" data-source="periods" data-field="gop" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="egp" data-tone="sign">—</span><span class="d"><span class="en">Margin</span><span class="ar" lang="ar">الهامش</span> <b class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="gop_margin" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="pct" data-tone="sign">—</b><span class="tp-hascmp"> · <span data-draw="cmp-label">—</span> <span class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="gop_margin" data-where="period={{PREV}}" data-dyn="cmp" data-fmt="pct">—</span></span></span><div class="tp-spark" data-draw="spark" data-source="summary" data-field="gop"></div></div>
+   </section>
+   <p class="tp-scope">{{SCOPE}}</p>
+
+   <section class="tp-row2" id="revenue-sec">
+    <div class="tp-card" id="mix-card">
+     <h2><span class="en">Revenue overview</span><span class="ar" lang="ar">نظرة عامة على الإيرادات</span> · <span data-draw="plabel">—</span></h2>
+     <p class="sub"><span class="en">Share of revenue by department for the selected period. Food includes board-package and outlet sales.</span><span class="ar" lang="ar">توزيع الإيرادات حسب القسم للفترة المختارة. تشمل الأغذية إيرادات الباقات والمنافذ.</span></p>
+     <div class="tp-donutwrap">
+      <div class="tp-donut" data-draw="donut" data-source="groups"></div>
+      <div>
+       <div class="tp-hero"><span class="tp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10h18v10H3zM5 4h14v4H5z"/></svg></span><div><small><span class="en">Rooms revenue</span><span class="ar" lang="ar">إيرادات الغرف</span></small><b class="tp-num dash-skeleton" data-draw="v" data-source="periods" data-field="rooms_revenue" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="egp">—</b></div></div>
+       <div class="tp-legend" data-draw="mixlegend" data-source="groups"></div>
+      </div>
+     </div>
+    </div>
+    <div class="tp-stack">
+     <div class="tp-mini">
+      <div class="tp-card" id="kpi-payroll"><span class="tp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0z"/></svg></span><span class="k"><span class="en">Payroll % of revenue</span><span class="ar" lang="ar">نسبة الرواتب من الإيرادات</span></span><span class="v tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="payroll_pct" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="pct" data-bench="payroll_pct">—</span><span class="s"><span class="en">Norm ≤ 35%</span><span class="ar" lang="ar">المعيار ≤ 35%</span><span class="tp-hascmp"> · <span data-draw="cmp-label">—</span> <span class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="payroll_pct" data-where="period={{PREV}}" data-dyn="cmp" data-fmt="pct">—</span></span></span></div>
+      <div class="tp-card" id="kpi-bev"><span class="tp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h12l-2 9a4 4 0 0 1-8 0zM11 16h2v4h3v2H8v-2h3z"/></svg></span><span class="k"><span class="en">Beverage cost %</span><span class="ar" lang="ar">نسبة تكلفة المشروبات</span></span><span class="v tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="bev_cost_pct" data-where="period={{LATEST}}" data-dyn="sel" data-fmt="pct" data-bench="bev_cost_pct">—</span><span class="s"><span class="en">Norm ≤ 25%</span><span class="ar" lang="ar">المعيار ≤ 25%</span><span class="tp-hascmp"> · <span data-draw="cmp-label">—</span> <span class="tp-num dash-skeleton" data-draw="v" data-source="ratios" data-field="bev_cost_pct" data-where="period={{PREV}}" data-dyn="cmp" data-fmt="pct">—</span></span></span></div>
+     </div>
+     <div class="tp-card" id="gop-card">
+      <h2><span class="en">Gross operating profit by month</span><span class="ar" lang="ar">إجمالي الربح التشغيلي حسب الشهر</span></h2>
+      <p class="sub">{{YTD_LABEL}} <b class="tp-num dash-skeleton" data-draw="v" data-source="periods" data-field="gop" data-where="period={{YTD}}" data-fmt="egp">—</b><span class="en">, see data checks.</span><span class="ar" lang="ar">، راجع مراجعة البيانات.</span></p>
+      <div class="tp-chart dash-skeleton" id="gop-trend" data-draw="gop" data-source="summary" style="min-height:150px"></div>
+     </div>
+    </div>
+   </section>
+
+   <section class="tp-row3" id="costs-sec">
+    <div class="tp-card" id="movers-sec">
+     <h2><span class="en">Largest account movements</span><span class="ar" lang="ar">أكبر التغيرات في الحسابات</span></h2>
+     <p class="sub">{{MOVERS_SUB}}</p>
+     <div class="tp-wrap">
+      <table id="movers-table" data-source="movers" data-row-key="account">
+       <thead><tr><th data-field="description"><span class="en">Account</span><span class="ar" lang="ar">الحساب</span></th><th data-field="prev">{{PREV_SHORT}}</th><th data-field="cur">{{CUR_SHORT}}</th><th data-field="change"><span class="en">Change</span><span class="ar" lang="ar">التغير</span></th></tr></thead>
+       <tbody data-draw="movers-body"></tbody>
+      </table>
+     </div>
+    </div>
+    <div class="tp-stack">
+     <div class="tp-card" id="revexp-card">
+      <h2><span class="en">Revenue vs expenses</span><span class="ar" lang="ar">الإيرادات مقابل المصروفات</span></h2>
+      <p class="sub"><span class="en">Monthly totals. GOP is the gap between the bars.</span><span class="ar" lang="ar">الإجماليات الشهرية. الربح التشغيلي هو الفرق بين العمودين.</span></p>
+      <div class="tp-chart dash-skeleton" id="rev-exp" data-draw="rev-exp" data-source="summary" style="min-height:220px"></div>
+     </div>
+     <div class="tp-card" id="costs-card">
+      <h2><span class="en">Cost groups</span><span class="ar" lang="ar">مجموعات التكاليف</span> · <span data-draw="plabel">—</span></h2>
+      <p class="sub"><span class="en">Bright bar is the selected period, faint bar the comparison period. Amber means the cost went up.</span><span class="ar" lang="ar">العمود الساطع للفترة المختارة والباهت لفترة المقارنة. اللون الأصفر يعني ارتفاع التكلفة.</span></p>
+      <div class="tp-chart dash-skeleton" id="costs" data-draw="costs" data-source="groups" style="min-height:330px"></div>
+     </div>
+    </div>
+   </section>
+
+   <section class="tp-card" id="ratios-sec">
+    <h2><span class="en">Operating ratios against resort norms</span><span class="ar" lang="ar">مؤشرات التشغيل مقارنة بمعايير المنتجعات</span></h2>
+    <p class="sub"><span class="en">Food and beverage cost as % of their own revenue. Payroll (all departments, staff meals excluded) and maintenance (non-payroll R&amp;M) as % of total revenue.</span><span class="ar" lang="ar">تكلفة الأغذية والمشروبات كنسبة من إيرادات كل منهما. الرواتب (جميع الأقسام، بدون وجبات العاملين) والصيانة (بدون الرواتب) كنسبة من إجمالي الإيرادات.</span></p>
+    <div class="tp-wrap">
+     <table id="ratios-table" data-source="ratios" data-row-key="period">
+      <thead><tr><th data-field="label"><span class="en">Period</span><span class="ar" lang="ar">الفترة</span></th><th data-field="food_cost_pct"><span class="en">Food cost</span><span class="ar" lang="ar">تكلفة الأغذية</span></th><th data-field="bev_cost_pct"><span class="en">Beverage cost</span><span class="ar" lang="ar">تكلفة المشروبات</span></th><th data-field="payroll_pct"><span class="en">Payroll</span><span class="ar" lang="ar">الرواتب</span></th><th data-field="maint_pct"><span class="en">Maintenance</span><span class="ar" lang="ar">الصيانة</span></th><th data-field="gop_margin"><span class="en">GOP margin</span><span class="ar" lang="ar">هامش الربح التشغيلي</span></th></tr></thead>
+      <tbody data-draw="ratios-body"></tbody>
+      <tfoot data-draw="bench"></tfoot>
+     </table>
+    </div>
+   </section>
+
+   <section class="tp-card tp-checks" id="data-checks">
+    <h2><span class="en">Data checks before you rely on the YTD figures</span><span class="ar" lang="ar">مراجعة البيانات قبل الاعتماد على أرقام منذ بداية العام</span></h2>
+    {{CHECKS}}
+   </section>
+
+   <details id="notes">
+    <summary><span class="en">How the figures were prepared</span><span class="ar" lang="ar">كيف أُعدت الأرقام</span></summary>
+    {{NOTES}}
+   </details>
+  </main>
+
+  <aside class="tp-right">
+   <section id="alerts">
+    <h2><span class="en">Alerts</span><span class="ar" lang="ar">التنبيهات</span></h2><p class="tp-scope">{{ALERTS_SCOPE}}</p>
+    {{ALERTS}}
+   </section>
+   <hr class="tp-sep">
+   <section id="actions">
+    <h2><span class="en">Actions</span><span class="ar" lang="ar">الإجراءات</span></h2>
+    {{ACTIONS}}
+   </section>
+   <div class="tp-cta">
+    {{CTA}}
+    <button type="button" data-target="data-checks"><span class="en">View data checks →</span><span class="ar" lang="ar">عرض مراجعة البيانات ←</span></button>
+   </div>
+  </aside>
+ </div>
+</div>
+
+<script>
+window.tp = (function () {
+  const n0 = d3.format(',.0f'), p1 = d3.format('.1f');
+  const fmt = {egp: (v) => n0(v), pct: (v) => p1(v) + '%', spct: (v) => (v > 0 ? '+' : '') + p1(v) + '%', segp: (v) => (v > 0 ? '+' : '') + n0(v)};
+  const C = {lime: '#9be35a', green: '#4cc23a', deep: '#1f6b2a', bad: '#ff6b6b', exp: '#e5484d', warn: '#f2c14e', track: '#1c2a21'};
+  // Typical full-service resort ranges: [good limit, warning limit]; 'low' means lower is better.
+  const BENCH = {
+    food_cost_pct: {good: 35, warn: 40, dir: 'low', label: '≤ 35%'},
+    bev_cost_pct: {good: 25, warn: 30, dir: 'low', label: '≤ 25%'},
+    payroll_pct: {good: 35, warn: 40, dir: 'low', label: '≤ 35%'},
+    maint_pct: {good: 6, warn: 8, dir: 'low', label: '≤ 6%'},
+    gop_margin: {good: 25, warn: 10, dir: 'high', label: '≥ 25%'}
+  };
+  const DEFAULT = window.__META.defaults;
+  const AR = {
+    'Jul 2026': 'يوليو 2026', 'Aug 2026': 'أغسطس 2026', 'Sep 2026': 'سبتمبر 2026',
+    'Rooms': 'الغرف', 'Food': 'الأغذية', 'Beverage': 'المشروبات', 'Pool & recreation': 'حمام السباحة والترفيه', 'Excursions & other': 'الرحلات وإيرادات أخرى',
+    'Food cost of sales': 'تكلفة الأغذية', 'Beverage cost of sales': 'تكلفة المشروبات', 'Payroll (all departments)': 'الرواتب (جميع الأقسام)',
+    'Staff meals': 'وجبات العاملين', 'Maintenance (R&M)': 'الصيانة', 'Admin & general': 'الإدارة العامة', 'F&B operating': 'تشغيل الأغذية والمشروبات',
+    'Rooms operating': 'تشغيل الغرف', 'Sales & marketing': 'المبيعات والتسويق', 'Energy': 'الطاقة', 'FF&E & non-operating': 'الإحلال والتجديد وغير التشغيلية', 'Other': 'أخرى',
+    'Revenue': 'الإيرادات', 'Expenses': 'المصروفات', 'GOP': 'الربح التشغيلي', 'of revenue': 'من الإيرادات', 'Total revenue': 'إجمالي الإيرادات',
+    'Resort norm': 'المعيار', 'REV': 'إيراد', 'EXP': 'مصروف'
+  };
+  const ACC = {
+    '20110001': 'أغذية: المطعم الرئيسي', '10100001': 'الغرف: الحجوزات المخصصة', '20100027': 'أغذية: باقة العشاء', '20200001': 'أغذية: إجمالي تكلفة المبيعات',
+    '20130002': 'مشروبات: منفذ لاتيه ماركيتو', '85610001': 'الطاقة: الكهرباء', '55160002': 'رسوم حمام السباحة والشاطئ', '20300001': 'أغذية ومشروبات: الرواتب والأجور',
+    '61400020': 'تسويق: إعلانات محلية', '60400012': 'إدارة: ضيافة وترفيه', '20220001': 'مشروبات: إجمالي تكلفة المبيعات', '80400083': 'صيانة: معدات كهربائية',
+    '20200002': 'أغذية: دائن تكلفة المبيعات', '20100025': 'أغذية: باقة الإفطار', '80400038': 'صيانة: أثاث ونجارة'
+  };
+  const isAr = () => !!document.querySelector('.tp.ar-on');
+  const MON_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const MON_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const t = (s) => {
+    if (!isAr()) return s;
+    if (AR[s]) return AR[s];
+    const m = /^([A-Z][a-z]{2}) (\d{4})$/.exec(s);
+    if (m && MON_EN.includes(m[1])) return MON_AR[MON_EN.indexOf(m[1])] + ' ' + m[2];
+    return s;
+  };
+  const acc = (r) => (isAr() && ACC[r.account]) || r.description;
+  // Selected period and its comparison period.
+  const periods = () => { const d = dash.data('periods'); return d.status === 'ok' ? d.data : []; };
+  const sel = () => String(dash.params().period || DEFAULT.month);
+  const prow = (id) => periods().find((r) => r.period === id);
+  const cmp = () => { const r = prow(sel()); return r ? r.cmp || '' : ''; };
+  const kind = () => { const r = prow(sel()); return r ? r.kind : 'month'; };
+  const plabel = (id) => { const r = prow(id); return r ? (isAr() ? r.label_ar : r.label) : '—'; };
+  function status(f, v) {
+    const b = BENCH[f]; if (!b) return '';
+    if (b.dir === 'low') return v <= b.good ? 'up' : v <= b.warn ? 'wn' : 'dn';
+    return v >= b.good ? 'up' : v >= b.warn ? 'wn' : 'dn';
+  }
+  const toneColor = (s) => (s === 'up' ? C.lime : s === 'wn' ? C.warn : C.bad);
+  function row(rows, where) {
+    if (!where) return rows[0];
+    const conds = where.split('&').map((c) => c.split('=').map(decodeURIComponent));
+    return rows.find((r) => conds.every(([k, v]) => String(r[k]) === v));
+  }
+  function tip(el) {
+    const tt = document.createElement('div'); tt.className = 'tp-tip'; tt.hidden = true; el.appendChild(tt);
+    return {
+      show(ev, lines) {
+        tt.replaceChildren(...lines.map((l) => { const d = document.createElement('div'); d.textContent = l; return d; }));
+        tt.hidden = false;
+        const [x, y] = d3.pointer(ev, el);
+        tt.style.left = Math.max(0, Math.min(el.clientWidth - tt.offsetWidth, x + 12)) + 'px';
+        tt.style.top = Math.max(-10, y - tt.offsetHeight - 8) + 'px';
+      },
+      hide() { tt.hidden = true; }
+    };
+  }
+  function wait(el, d) {
+    el.replaceChildren();
+    if (d.status === 'loading') { el.classList.add('dash-skeleton'); return; }
+    el.classList.remove('dash-skeleton');
+    if (d.status === 'error') { const p = document.createElement('p'); p.className = 'sub'; p.textContent = isAr() ? 'تعذر تحميل بيانات هذا الرسم.' : 'This chart could not load its data.'; el.appendChild(p); }
+  }
+  function grad(svg, id, color, top, bottom) {
+    const g = svg.append('defs').append('linearGradient').attr('id', id).attr('x1', 0).attr('y1', 0).attr('x2', 0).attr('y2', 1);
+    g.append('stop').attr('offset', '0%').attr('stop-color', color).attr('stop-opacity', top);
+    g.append('stop').attr('offset', '100%').attr('stop-color', color).attr('stop-opacity', bottom);
+    return `url(#${id})`;
+  }
+  let uid = 0; const nid = (p) => p + '-' + (++uid);
+  return {fmt, C, BENCH, DEFAULT, status, toneColor, row, tip, wait, grad, nid, t, acc, isAr, periods, sel, prow, cmp, kind, plabel};
+})();
+
+dash.calc('ratios', {
+  title: 'Operating ratios by period',
+  description: 'Food and beverage cost %, payroll %, maintenance %, GOP margin, and change in revenue and expenses against each period\'s comparison period (per-month or per-quarter amounts for averages).',
+  inputs: ['periods'],
+  fn: (periods) => {
+    const r1 = (v) => Math.round(v * 10) / 10;
+    const by = Object.fromEntries(periods.map((r) => [r.period, r]));
+    return periods.map((r) => {
+      const p = r.cmp ? by[r.cmp] : null;
+      return {
+        period: r.period, label: r.label, kind: r.kind,
+        food_cost_pct: r1(+r.food_cost / +r.food_revenue * 100),
+        bev_cost_pct: r1(+r.beverage_cost / +r.beverage_revenue * 100),
+        payroll_pct: r1(+r.payroll / +r.revenue * 100),
+        maint_pct: r1(+r.maintenance / +r.revenue * 100),
+        gop_margin: r1(+r.gop / +r.revenue * 100),
+        rev_change_pct: p ? r1((+r.revenue / +p.revenue - 1) * 100) : null,
+        exp_change_pct: p ? r1((+r.expenses / +p.expenses - 1) * 100) : null
+      };
+    });
+  }
+});
+
+const REDRAW = ['donut', 'mixlegend', 'gop', 'rev-exp', 'costs', 'ratios-body', 'bench', 'movers-body', 'gauge', 'spark', 'period-select', 'cmp-label', 'plabel'];
+
+// Language switch: English / Arabic. The choice is remembered in this browser only.
+(function () {
+  const root = document.querySelector('.tp');
+  function setLang(lang, redraw) {
+    if (!root) return;
+    root.classList.toggle('ar-on', lang === 'ar');
+    document.querySelectorAll('.tp-lang button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    try { localStorage.setItem('tp-lang', lang); } catch (e) {}
+    if (redraw) REDRAW.forEach((n) => dash.draw(n));
+  }
+  let saved = 'en';
+  try { saved = localStorage.getItem('tp-lang') || 'en'; } catch (e) {}
+  setLang(saved === 'ar' ? 'ar' : 'en', false);
+  document.querySelectorAll('.tp-lang button').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.lang, true)));
+})();
+
+// Period type buttons. Day has no data in these exports, so it only shows a note.
+let dayNoteOpen = false;
+document.querySelectorAll('.tp-seg button').forEach((b) => {
+  b.addEventListener('click', () => {
+    const k = b.dataset.kind;
+    if (k === 'day') {
+      dayNoteOpen = !dayNoteOpen;
+      document.querySelectorAll('#day-note').forEach((n) => { n.hidden = !dayNoteOpen; });
+      b.classList.toggle('on', dayNoteOpen);
+      return;
+    }
+    dayNoteOpen = false;
+    document.querySelectorAll('#day-note').forEach((n) => { n.hidden = true; });
+    if (tp.kind() !== k) dash.setParams({period: tp.DEFAULT[k]});
+  });
+});
+
+// Reflect the selected period in the buttons and notes.
+dash.onData(() => {
+  const k = tp.kind(), s = tp.sel();
+  document.querySelectorAll('.tp-seg button').forEach((b) => {
+    if (b.dataset.kind === 'day') b.classList.toggle('on', dayNoteOpen);
+    else b.classList.toggle('on', b.dataset.kind === k);
+  });
+  const hasCmp = !!tp.cmp();
+  document.querySelectorAll('.tp-hascmp').forEach((n) => { n.hidden = !hasCmp; });
+  const early = (window.__META.ytdNoteFor || []).includes(s);
+  document.querySelectorAll('#ytd-note').forEach((n) => { n.hidden = !early; });
+});
+
+// Sidebar and call-to-action buttons scroll to their section.
+document.querySelectorAll('.tp [data-target]').forEach((b) => {
+  b.addEventListener('click', () => {
+    const el = document.getElementById(b.dataset.target);
+    if (el) el.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
+    if (b.closest('.tp-nav')) document.querySelectorAll('.tp-nav button').forEach((x) => x.classList.toggle('on', x === b));
+  });
+});
+
+// Export: HTML saves a standalone copy of what is on screen; PDF explains the built-in export.
+(function () {
+  const MSGS = ['msg-saved', 'msg-declined', 'msg-unavail', 'msg-pdf'];
+  const show = (id) => MSGS.forEach((m) => document.querySelectorAll('#' + m).forEach((n) => { n.hidden = m !== id; }));
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  function snapshot() {
+    const root = document.querySelector('.tp');
+    const clone = root.cloneNode(true);
+    clone.querySelectorAll('.tp-tip,.tp-export,.tp-lang,#export-msgs,.tp-note.day,.tp-seg,.tp-cta button').forEach((n) => n.remove());
+    clone.querySelectorAll('.dash-skeleton').forEach((n) => n.classList.remove('dash-skeleton'));
+    clone.querySelectorAll('select').forEach((s) => { const b = document.createElement('b'); b.textContent = tp.plabel(tp.sel()); s.replaceWith(b); });
+    const attrs = ['data-draw', 'data-source', 'data-field', 'data-where', 'data-dyn', 'data-target', 'data-kind'];
+    clone.querySelectorAll('*').forEach((n) => attrs.forEach((a) => n.removeAttribute(a)));
+    const css = [...document.querySelectorAll('style')].map((s) => s.textContent).filter((t) => t.includes('.tp-app')).join('\n');
+    const ar = root.classList.contains('ar-on');
+    const label = tp.plabel(tp.sel());
+    const title = (ar ? 'تونس بيراميدز – الأرباح والخسائر – ' : 'Tunis Pyramids P&L – ') + label;
+    const stamp = new Date().toISOString().slice(0, 10);
+    const base = ':root{--font-anthropic-sans:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;--font-anthropic-serif:Georgia,serif}' +
+      'html,body{margin:0;background:#050806}body{padding:16px}[hidden]{display:none!important}' +
+      '.xp-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;color:#8a9b90;font:12px "Segoe UI",system-ui,sans-serif;margin:0 0 10px}' +
+      '.xp-bar button{cursor:pointer;background:#9be35a;color:#0a1f0e;border:0;border-radius:9px;padding:8px 14px;font:600 12.5px "Segoe UI",system-ui,sans-serif}' +
+      '@media print{body{padding:0}.xp-bar{display:none}@page{margin:8mm}}';
+    const btn = ar ? 'طباعة / حفظ كـ PDF' : 'Print / Save as PDF';
+    const note = (ar ? 'نسخة مُصدَّرة بتاريخ ' : 'Exported ') + stamp + ' · ' + label;
+    return '<!doctype html><html lang="' + (ar ? 'ar' : 'en') + '" dir="' + (ar ? 'rtl' : 'ltr') + '"><head><meta charset="utf-8">' +
+      '<meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(title) + '</title><style>' + base + css + '</style></head><body>' +
+      '<div class="xp-bar"><span>' + esc(note) + '</span><button type="button" onclick="window.print()">' + btn + '</button></div>' +
+      clone.outerHTML + '</body></html>';
+  }
+  document.querySelectorAll('#export-html').forEach((b) => b.addEventListener('click', async () => {
+    let downloads = null;
+    try { downloads = await claude.use('downloads'); } catch (e) { downloads = null; }
+    if (!downloads) { show('msg-unavail'); return; }
+    try {
+      await downloads.save({filename: 'tunis-pyramids-pl-' + tp.sel() + (tp.isAr() ? '-ar' : '') + '.html', data: snapshot()});
+      show('msg-saved');
+    } catch (e) {
+      const c = e && e.code;
+      show(c === 'declined' || c === 'rate_limited' ? 'msg-declined' : 'msg-unavail');
+    }
+  }));
+  document.querySelectorAll('#export-pdf').forEach((b) => b.addEventListener('click', () => show('msg-pdf')));
+})();
+
+dash.draw('period-select', (sel) => {
+  const rows = tp.periods().filter((r) => r.kind === tp.kind());
+  sel.replaceChildren(...rows.map((r) => new Option(tp.isAr() ? r.label_ar : r.label, r.period)));
+  sel.value = tp.sel();
+  sel.onchange = () => dash.setParams({period: sel.value});
+});
+
+dash.draw('plabel', (el) => { el.textContent = tp.plabel(tp.sel()); });
+dash.draw('cmp-label', (el) => { const c = tp.cmp(); el.textContent = c ? tp.plabel(c) : '—'; });
+
+dash.draw('v', (el) => {
+  const dyn = el.dataset.dyn;
+  if (dyn === 'sel') el.dataset.where = 'period=' + tp.sel();
+  if (dyn === 'cmp') { const c = tp.cmp(); if (c) el.dataset.where = 'period=' + c; }
+  const d = dash.data(el.dataset.source);
+  if (d.status === 'loading') { el.textContent = '—'; return; }
+  el.classList.remove('dash-skeleton', 'up', 'dn', 'wn');
+  const r = d.status === 'ok' ? tp.row(d.data, el.dataset.where) : null;
+  const v = r ? r[el.dataset.field] : null;
+  if (v === null || v === undefined || v === '' || isNaN(+v)) { el.textContent = '—'; return; }
+  const num = +v;
+  el.textContent = (tp.fmt[el.dataset.fmt] || tp.fmt.egp)(num);
+  const tone = el.dataset.tone;
+  if (tone === 'sign' && num !== 0) el.classList.add(num > 0 ? 'up' : 'dn');
+  if (tone === 'neg-good' && num !== 0) el.classList.add(num < 0 ? 'up' : 'dn');
+  if (el.dataset.bench) el.classList.add(tp.status(el.dataset.bench, num));
+});
+
+dash.draw('spark', (el) => {
+  const d = dash.data(el.dataset.source);
+  el.replaceChildren();
+  if (d.status !== 'ok') return;
+  const f = el.dataset.field;
+  const vals = d.data.map((r) => +r[f]);
+  const W = el.clientWidth || 200, H = 38;
+  const last = vals[vals.length - 1], prev = vals[vals.length - 2];
+  const good = f === 'expenses' ? last <= prev : last >= prev;
+  const col = good ? tp.C.lime : tp.C.bad;
+  const x = d3.scaleLinear().domain([0, vals.length - 1]).range([3, W - 3]);
+  const y = d3.scaleLinear().domain(d3.extent(vals)).nice().range([H - 3, 3]);
+  const svg = d3.select(el).append('svg').attr('width', W).attr('height', H).attr('role', 'img').attr('aria-label', `${f}: ${window.__META.rangeEn}`);
+  const fill = tp.grad(svg, tp.nid('sp'), col, 0.35, 0);
+  svg.append('path').datum(vals).attr('d', d3.area().x((v, i) => x(i)).y0(H).y1((v) => y(v))).style('fill', fill);
+  svg.append('path').datum(vals).attr('d', d3.line().x((v, i) => x(i)).y((v) => y(v))).style('fill', 'none').style('stroke', col).style('stroke-width', 2);
+  svg.append('circle').attr('cx', x(vals.length - 1)).attr('cy', y(last)).attr('r', 3.5).style('fill', col);
+});
+
+dash.draw('gauge', (el) => {
+  const d = dash.data(el.dataset.source);
+  el.replaceChildren();
+  if (d.status !== 'ok' || !d.data.length) return;
+  const f = el.dataset.field;
+  const r0 = d.data.find((r) => r.period === tp.sel());
+  if (!r0) return;
+  const v = +r0[f];
+  const W = 92, H = 62, r = 40;
+  const a0 = -Math.PI * 0.75, a1 = Math.PI * 0.75;
+  const s = d3.scaleLinear().domain([0, 100]).range([a0, a1]).clamp(true);
+  const svg = d3.select(el).append('svg').attr('width', W).attr('height', H).attr('role', 'img').attr('aria-label', `${tp.fmt.pct(v)} / ${tp.BENCH[f].label}`);
+  const g = svg.append('g').attr('transform', `translate(${W / 2},50)`);
+  const arc = d3.arc().innerRadius(r - 8).outerRadius(r).cornerRadius(4);
+  g.append('path').attr('d', arc({startAngle: a0, endAngle: a1})).style('fill', tp.C.track);
+  g.append('path').attr('d', arc({startAngle: a0, endAngle: s(tp.BENCH[f].good)})).style('fill', tp.C.deep);
+  g.append('path').attr('d', arc({startAngle: a0, endAngle: s(v)})).style('fill', tp.toneColor(tp.status(f, v)));
+  const na = s(v) - Math.PI / 2;
+  g.append('line').attr('x1', 0).attr('y1', 0).attr('x2', Math.cos(na) * (r - 12)).attr('y2', Math.sin(na) * (r - 12)).style('stroke', '#e9f3ec').style('stroke-width', 2).style('stroke-linecap', 'round');
+  g.append('circle').attr('r', 3.5).style('fill', '#e9f3ec');
+});
+
+// Amount of a group in a period. Averages are derived from Jan–Jun.
+function groupAmount(rows, group, period) {
+  const hit = rows.find((r) => r.group === group && r.period === period);
+  if (hit) return +hit.amount;
+  const ref = tp.prow(period);
+  if (ref && ref.kind === 'ref') {
+    const h1 = rows.find((r) => r.group === group && r.period === window.__META.preId);
+    return h1 ? +h1.amount * (+ref.months / window.__META.preMonths) : 0;
+  }
+  return 0;
+}
+
+const MIXCOL = ['#9be35a', '#4cc23a', '#d9f7c2', '#2f8f3a', '#5d6e63'];
+function periodRevenue() {
+  const d = dash.data('groups');
+  if (d.status !== 'ok') return {d, rows: []};
+  const s = tp.sel();
+  const rows = d.data.filter((r) => r.section === 'Revenue' && r.period === s);
+  return {d, rows: rows.map((r, i) => ({...r, amount: +r.amount, color: MIXCOL[i % MIXCOL.length]}))};
+}
+
+dash.draw('donut', (el) => {
+  const {d, rows} = periodRevenue();
+  if (d.status !== 'ok') { tp.wait(el, d); return; }
+  el.replaceChildren();
+  if (!rows.length) return;
+  const S = Math.min(el.clientWidth || 200, 200), R = S / 2;
+  const tot = d3.sum(rows, (r) => r.amount);
+  const svg = d3.select(el).append('svg').attr('width', S).attr('height', S).attr('role', 'img').attr('aria-label', tp.t('Revenue') + ' · ' + tp.plabel(tp.sel()));
+  const g = svg.append('g').attr('transform', `translate(${R},${R})`);
+  const arc = d3.arc().innerRadius(R * 0.68).outerRadius(R).padAngle(0.012);
+  const tt = tp.tip(el);
+  g.selectAll('path').data(d3.pie().sort(null).value((r) => Math.max(0, r.amount))(rows)).join('path').attr('d', arc)
+    .style('fill', (a) => a.data.color)
+    .on('pointermove', (ev, a) => tt.show(ev, [tp.t(a.data.group), tp.fmt.egp(a.data.amount), d3.format('.1%')(a.data.amount / tot) + ' ' + tp.t('of revenue')]))
+    .on('pointerleave', () => tt.hide());
+  g.append('text').attr('text-anchor', 'middle').attr('y', -2).style('fill', '#e9f3ec').style('font-size', Math.round(R * 0.24) + 'px').style('font-weight', 600).text(d3.format('.3~s')(tot));
+  g.append('text').attr('text-anchor', 'middle').attr('y', R * 0.18).style('fill', '#8a9b90').style('font-size', '11px').text(tp.t('Total revenue'));
+});
+
+dash.draw('mixlegend', (el) => {
+  const {d, rows} = periodRevenue();
+  el.replaceChildren();
+  if (d.status !== 'ok') return;
+  const tot = d3.sum(rows, (r) => r.amount);
+  for (const r of rows) {
+    const it = document.createElement('div'); it.className = 'it';
+    const top = document.createElement('span'); const i = document.createElement('i'); i.style.background = r.color;
+    top.append(i, document.createTextNode(tp.t(r.group) + ' · ' + d3.format('.0%')(r.amount / tot)));
+    const b = document.createElement('b'); b.textContent = tp.fmt.egp(r.amount);
+    it.append(top, b); el.appendChild(it);
+  }
+});
+
+dash.draw('gop', (el) => {
+  const s = dash.data('summary');
+  if (s.status !== 'ok') { tp.wait(el, s); return; }
+  el.replaceChildren(); el.classList.remove('dash-skeleton');
+  const rows = s.data.map((r) => ({month: r.month, gop: +r.gop}));
+  const W = el.clientWidth || 400, H = 150, m = {t: 22, r: 16, b: 22, l: 16};
+  const x = d3.scalePoint().domain(rows.map((r) => r.month)).range([m.l + 24, W - m.r - 24]);
+  const y = d3.scaleLinear().domain([Math.min(0, d3.min(rows, (r) => r.gop)), Math.max(0, d3.max(rows, (r) => r.gop))]).nice().range([H - m.b, m.t]);
+  const svg = d3.select(el).append('svg').attr('width', W).attr('height', H).attr('role', 'img').attr('aria-label', tp.t('GOP'));
+  const fill = tp.grad(svg, tp.nid('gop'), tp.C.lime, 0.4, 0.02);
+  svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(0)).attr('y2', y(0)).style('stroke', '#2b3d31').style('stroke-dasharray', '3 3');
+  svg.append('path').datum(rows).attr('d', d3.area().x((r) => x(r.month)).y0(y(0)).y1((r) => y(r.gop))).style('fill', fill);
+  svg.append('path').datum(rows).attr('d', d3.line().x((r) => x(r.month)).y((r) => y(r.gop))).style('fill', 'none').style('stroke', tp.C.lime).style('stroke-width', 2.2);
+  const tt = tp.tip(el);
+  const pts = svg.append('g').selectAll('g').data(rows).join('g').attr('transform', (r) => `translate(${x(r.month)},${y(r.gop)})`);
+  pts.append('circle').attr('r', 5).style('fill', (r) => (r.gop >= 0 ? tp.C.lime : tp.C.bad)).style('stroke', '#0f1712').style('stroke-width', 2);
+  pts.append('text').attr('class', 'lbl').attr('text-anchor', 'middle').attr('y', -11)
+    .style('fill', (r) => (r.gop >= 0 ? tp.C.lime : tp.C.bad)).style('font-weight', 600).text((r) => d3.format('.3~s')(r.gop));
+  pts.append('circle').attr('r', 16).style('fill', 'transparent')
+    .on('pointermove', (ev, r) => tt.show(ev, [tp.t(r.month), tp.t('GOP') + '  ' + tp.fmt.egp(r.gop)])).on('pointerleave', () => tt.hide());
+  svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b + 4})`).call(d3.axisBottom(x).tickSize(0).tickFormat(tp.t)).call((g) => g.select('.domain').remove());
+});
+
+dash.draw('rev-exp', (el) => {
+  const s = dash.data('summary');
+  if (s.status !== 'ok') { tp.wait(el, s); return; }
+  el.replaceChildren(); el.classList.remove('dash-skeleton');
+  const rows = s.data.map((r) => ({month: r.month, revenue: +r.revenue, expenses: +r.expenses, gop: +r.gop}));
+  const selLabel = tp.kind() === 'month' ? (tp.prow(tp.sel()) || {}).label : null;
+  const lg = document.createElement('div'); lg.className = 'tp-legend'; lg.style.gridTemplateColumns = 'auto auto'; lg.style.justifyContent = 'start'; lg.style.marginBottom = '8px';
+  for (const [k, c] of [['Revenue', tp.C.lime], ['Expenses', tp.C.exp]]) { const it = document.createElement('div'); it.className = 'it'; const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = c; sp.append(i, document.createTextNode(tp.t(k))); it.appendChild(sp); lg.appendChild(it); }
+  el.appendChild(lg);
+  const W = el.clientWidth || 400, H = 200, m = {t: 18, r: 4, b: 22};
+  const svg = d3.select(el).append('svg').attr('width', W).attr('height', H).attr('role', 'img').attr('aria-label', tp.t('Revenue') + ' / ' + tp.t('Expenses'));
+  const y = d3.scaleLinear().domain([0, d3.max(rows, (r) => Math.max(r.revenue, r.expenses)) * 1.08]).nice().range([H - m.b, m.t]);
+  const ax = svg.append('g').attr('class', 'axis').call(d3.axisLeft(y).ticks(4).tickFormat(d3.format('~s')).tickSize(0));
+  ax.select('.domain').remove();
+  const L = (d3.max(ax.selectAll('text').nodes(), (n) => n.getComputedTextLength()) || 28) + 8;
+  ax.attr('transform', `translate(${L - 4},0)`);
+  svg.insert('g', ':first-child').attr('class', 'grid').selectAll('line').data(y.ticks(4)).join('line').attr('x1', L).attr('x2', W - m.r).attr('y1', y).attr('y2', y);
+  const x0 = d3.scaleBand().domain(rows.map((r) => r.month)).range([L, W - m.r]).paddingInner(0.35).paddingOuter(0.2);
+  const x1 = d3.scaleBand().domain(['revenue', 'expenses']).range([0, x0.bandwidth()]).padding(0.1);
+  const tt = tp.tip(el);
+  const g = svg.append('g').selectAll('g').data(rows).join('g').attr('transform', (r) => `translate(${x0(r.month)},0)`)
+    .style('opacity', (r) => (selLabel && r.month !== selLabel ? 0.35 : 1));
+  g.selectAll('rect').data((r) => ['revenue', 'expenses'].map((k) => ({k, v: r[k]}))).join('rect')
+    .attr('x', (q) => x1(q.k)).attr('width', x1.bandwidth()).attr('y', (q) => y(q.v)).attr('height', (q) => y(0) - y(q.v)).attr('rx', 3)
+    .style('fill', (q) => (q.k === 'revenue' ? tp.C.lime : tp.C.exp));
+  g.append('rect').attr('width', x0.bandwidth()).attr('height', H - m.b).style('fill', 'transparent')
+    .on('pointermove', (ev, r) => tt.show(ev, [tp.t(r.month), tp.t('Revenue') + '  ' + tp.fmt.egp(r.revenue), tp.t('Expenses') + '  ' + tp.fmt.egp(r.expenses), tp.t('GOP') + '  ' + tp.fmt.egp(r.gop)]))
+    .on('pointerleave', () => tt.hide());
+  svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b + 4})`).call(d3.axisBottom(x0).tickSize(0).tickFormat(tp.t)).call((q) => q.select('.domain').remove());
+});
+
+dash.draw('costs', (el) => {
+  const s = dash.data('groups');
+  if (s.status !== 'ok') { tp.wait(el, s); return; }
+  el.replaceChildren(); el.classList.remove('dash-skeleton');
+  const rows = s.data.filter((r) => r.section === 'Cost');
+  const cur = tp.sel(), prev = tp.cmp();
+  const groups = [...new Set(rows.map((r) => r.group))].sort((a, b) => groupAmount(rows, b, cur) - groupAmount(rows, a, cur));
+  const W = el.clientWidth || 400, bandH = 27, m = {t: 2, b: 4, r: 50};
+  const H = m.t + groups.length * bandH + m.b;
+  const svg = d3.select(el).append('svg').attr('width', W).attr('height', H).attr('role', 'img').attr('aria-label', tp.t('Expenses') + ' · ' + tp.plabel(cur));
+  const lbls = svg.append('g').selectAll('text').data(groups).join('text').attr('class', 'lbl').style('fill', '#8a9b90').text((q) => tp.t(q));
+  const L = Math.min(W * 0.46, (d3.max(lbls.nodes(), (n) => n.getComputedTextLength()) || 100) + 10);
+  const maxV = d3.max(groups.flatMap((g) => [groupAmount(rows, g, cur), prev ? groupAmount(rows, g, prev) : 0])) || 1;
+  const x = d3.scaleLinear().domain([0, maxV]).range([L, W - m.r]);
+  const y = d3.scaleBand().domain(groups).range([m.t, H - m.b]).padding(0.3);
+  lbls.attr('x', 0).attr('y', (q) => y(q) + y.bandwidth() / 2).attr('dominant-baseline', 'middle');
+  const tt = tp.tip(el);
+  for (const g of groups) {
+    const b = groupAmount(rows, g, cur), a = prev ? groupAmount(rows, g, prev) : null;
+    if (a !== null) svg.append('rect').attr('x', L).attr('y', y(g)).attr('height', y.bandwidth()).attr('width', Math.max(0, x(Math.max(0, a)) - L)).attr('rx', 3).style('fill', '#1c3a22');
+    svg.append('rect').attr('x', L).attr('y', y(g) + y.bandwidth() * 0.2).attr('height', y.bandwidth() * 0.6).attr('width', Math.max(0, x(Math.max(0, b)) - L)).attr('rx', 3)
+      .style('fill', a !== null && b > a ? tp.C.warn : tp.C.lime);
+    svg.append('text').attr('class', 'lbl').attr('x', Math.max(x(Math.max(0, a || 0)), x(Math.max(0, b))) + 5).attr('y', y(g) + y.bandwidth() / 2).attr('dominant-baseline', 'middle')
+      .style('fill', '#e9f3ec').text(d3.format('.3~s')(b));
+    const lines = [tp.t(g), tp.plabel(cur) + '  ' + tp.fmt.egp(b)];
+    if (a !== null) lines.push(tp.plabel(prev) + '  ' + tp.fmt.egp(a));
+    svg.append('rect').attr('x', 0).attr('y', y(g)).attr('width', W).attr('height', y.bandwidth()).style('fill', 'transparent')
+      .on('pointermove', (ev) => tt.show(ev, lines)).on('pointerleave', () => tt.hide());
+  }
+});
+
+dash.draw('ratios-body', (tb) => {
+  const d = dash.data('ratios');
+  tb.replaceChildren();
+  if (d.status !== 'ok') return;
+  const s = tp.sel();
+  for (const r of d.data.filter((q) => q.kind !== 'ref')) {
+    const tr = document.createElement('tr'); tr.dataset.key = r.period;
+    if (r.period === s) tr.className = 'sel';
+    const td0 = document.createElement('td'); td0.textContent = tp.plabel(r.period); tr.appendChild(td0);
+    for (const f of ['food_cost_pct', 'bev_cost_pct', 'payroll_pct', 'maint_pct', 'gop_margin']) {
+      const td = document.createElement('td'); const c = document.createElement('span');
+      c.className = 'tp-chip ' + tp.status(f, +r[f]); c.textContent = tp.fmt.pct(+r[f]); td.appendChild(c); tr.appendChild(td);
+    }
+    tr.style.cursor = 'pointer';
+    tr.onclick = () => dash.setParams({period: r.period});
+    tb.appendChild(tr);
+  }
+});
+
+dash.draw('bench', (tf) => {
+  const tr = document.createElement('tr');
+  const td0 = document.createElement('td'); td0.textContent = tp.t('Resort norm'); tr.appendChild(td0);
+  for (const f of ['food_cost_pct', 'bev_cost_pct', 'payroll_pct', 'maint_pct', 'gop_margin']) { const td = document.createElement('td'); td.textContent = tp.BENCH[f].label; tr.appendChild(td); }
+  tf.replaceChildren(tr);
+});
+
+dash.draw('movers-body', (tb) => {
+  const d = dash.data('movers');
+  tb.replaceChildren();
+  if (d.status !== 'ok') return;
+  for (const r of d.data) {
+    const tr = document.createElement('tr'); tr.dataset.key = r.account;
+    const td0 = document.createElement('td'); const who = document.createElement('div'); who.className = 'tp-who';
+    const av = document.createElement('span'); av.className = 'tp-av ' + (r.type === 'Revenue' ? 'r' : 'c'); av.textContent = tp.t(r.type === 'Revenue' ? 'REV' : 'EXP');
+    const nm = document.createElement('div'); nm.textContent = tp.acc(r); const sm = document.createElement('small'); sm.textContent = r.account; nm.appendChild(sm);
+    who.append(av, nm); td0.appendChild(who); tr.appendChild(td0);
+    for (const k of ['prev', 'cur']) { const td = document.createElement('td'); td.textContent = tp.fmt.egp(+r[k]); td.style.direction = 'ltr'; tr.appendChild(td); }
+    const ch = +r.change; const hurts = r.type === 'Revenue' ? ch < 0 : ch > 0;
+    const tc = document.createElement('td'); tc.textContent = tp.fmt.segp(ch); tc.className = hurts ? 'dn' : 'up'; tc.style.direction = 'ltr'; tr.appendChild(tc);
+    tb.appendChild(tr);
+  }
+});
+</script>

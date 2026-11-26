@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tunis Pyramids</title>
+<style>
+:root{--font-anthropic-sans:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;--font-anthropic-serif:Georgia,serif}
+html,body{margin:0;background:#050806}body{padding:16px}[hidden]{display:none!important}
+.tp-export,#export-msgs{display:none!important}.tp-side,.tp-nav{min-width:0}
+.sa-foot{color:#5d6e63;font:11.5px "Segoe UI",system-ui,sans-serif;margin:10px 4px 0}
+@media print{body{padding:0}.sa-foot{display:none}}
+@media (max-width:480px){body{padding:8px}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+window.__SRC = /*SRC*/;
+window.__META = /*META*/;
+window.dash = (function () {
+  const calcs = {}, draws = {}, onDatas = [];
+  let params = {period: window.__META.defaults.month};
+  const api = {
+    colors: ['#9be35a', '#4cc23a', '#d9f7c2', '#2f8f3a', '#5d6e63'],
+    data(id) {
+      if (window.__SRC[id]) { const d = window.__SRC[id]; return {status: 'ok', data: d, columns: Object.keys(d[0] || {})}; }
+      if (calcs[id]) { const c = calcs[id]; return {status: 'ok', data: c.fn(...c.inputs.map((i) => window.__SRC[i]))}; }
+      return {status: 'missing', data: []};
+    },
+    calc(id, o) { calcs[id] = o; },
+    loader() {},
+    draw(name, fn) { if (fn) draws[name] = typeof fn === 'function' ? fn : fn.update; else run(name); },
+    onData(fn) { onDatas.push(fn); },
+    params() { return params; },
+    setParams(p) { Object.assign(params, p); runAll(); },
+    resetParams() { params = {period: window.__META.defaults.month}; runAll(); }, setLink() {}, refresh() {}
+  };
+  function run(name) { document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => { try { draws[name](el); } catch (e) { console.error(name, e); } }); }
+  function runAll() { onDatas.forEach((f) => f()); Object.keys(draws).forEach(run); }
+  api.__runAll = runAll;
+  return api;
+})();
+window.claude = {use: async () => null};
+</script>
+</head>
+<body>
+<div id="dash-root">
+<!--PAGE-->
+</div>
+<p class="sa-foot">Tunis Pyramids P&amp;L dashboard · updated automatically from the Google Drive exports · amounts in EGP</p>
+<script>
+dash.__runAll();
+let __rt; window.addEventListener('resize', () => { clearTimeout(__rt); __rt = setTimeout(dash.__runAll, 150); });
+</script>
+</body>
+</html>
