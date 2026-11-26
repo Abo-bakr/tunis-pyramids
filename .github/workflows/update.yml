@@ -2,7 +2,7 @@ name: Update dashboard from Google Drive
 
 on:
   schedule:
-    - cron: '*/30 * * * *'   # every 30 minutes (GitHub may run it a little later)
+    - cron: '7,37 * * * *'   # twice an hour, at :07 and :37 (GitHub may run it a little later)
   workflow_dispatch:          # "Run workflow" button for an immediate update
 
 permissions:
